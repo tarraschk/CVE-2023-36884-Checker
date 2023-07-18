@@ -1,0 +1,17 @@
+#Requires -RunAsAdministrator
+
+<# 
+ref : https://msrc.microsoft.com/update-guide/vulnerability/CVE-2023-36884
+ref : https://www.microsoft.com/en-us/security/blog/2023/07/11/storm-0978-attacks-reveal-financial-and-espionage-motives/
+#>
+
+$applications = @("Excel.exe", "Graph.exe", "MSAccess.exe", "MSPub.exe", "PowerPnt.exe", "Visio.exe", "WinProj.exe", "WinWord.exe", "Wordpad.exe")
+$key = "HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BLOCK_CROSS_PROTOCOL_FILE_NAVIGATION"
+if (Test-Path $key)
+{
+    foreach ($app in $applications)
+    {
+        Remove-ItemProperty -Path $key -Name $app -ErrorAction Stop
+        Write-Output " registry key for [$app] has been removed"
+    }
+}
